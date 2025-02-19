@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="utf-8">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Login</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> 
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+    <!-- Navbar (Üst Menü) -->
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Admin Paneli</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        
+                    </ul>
+                    @await Html.PartialAsync("_GirisPartial")
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sidebar (Sol Menü) -->
+    <div class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 200px;">
+        <a asp-controller="Admin" asp-action="Dashboard" class="w3-bar-item w3-button">
+            Kontrol Paneli
+        </a>
+        <a asp-area="" asp-controller="Admin" asp-action="Listele" class="w3-bar-item w3-button">Kullanıcıları Listele</a>
+        <!-- Dropdown Menü -->
+        <button class="w3-button w3-block w3-left-align" onclick="myAccFunc()">
+            Kullanıcı İşlemleri <i class="fa fa-caret-down"></i>
+        </button>
+        <div id="dropdown" class="w3-hide w3-white w3-card">
+            <a asp-area="" asp-controller="Admin" asp-action="Ekle" class="w3-bar-item w3-button">Kullanıcı Ekle</a>
+            <a asp-area="" asp-controller="User" asp-action="About" class="w3-bar-item w3-button">Kullanıcı Yetkilerini Düzenle</a>
+        </div>
+    </div>
+
+    <!-- İçerik Alanı -->
+    <div class="container" style="margin-left:15%">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script>
+        function myAccFunc() {
+            var x = document.getElementById("dropdown");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-green";
+            } 
+            else {
+                x.className = x.className.replace(" w3-show", "");
+                x.previousElementSibling.className =
+                x.previousElementSibling.className.replace(" w3-green", "");
+            }
+        }
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,63 @@
+﻿@model Login.Models.KayitViewModel
+
+@{
+    ViewData["Title"] = "Kayit";
+    Layout = "~/Views/Shared/_KayitLayout.cshtml";
+}
+
+<div class="account-container">
+    <div class="account-box">
+        <h2 class="text-center mb-4">Kayıt ol</h2>
+        <form asp-action="Kayit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (ViewBag.Message != null)
+            {
+                <div class="form-group" style="color:green;">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <div class="mb-3">
+                <label asp-for="FirstName" class="control-label">Ad:</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="LastName" class="form-label">Soyad:</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">E-posta adresi:</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label">Kullanıcı Adı:</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Şifre:</label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            
+            
+            <input type="submit" value="Kayıt ol" class="btn btn-success w-100 p-2" />
+            
+        </form>
+        <div>
+            Zaten üye misiniz?
+            <a asp-action="Giris">Giriş Yap</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

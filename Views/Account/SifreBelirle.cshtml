@@ -1,0 +1,21 @@
+﻿@model Login.Models.SifreBelirleViewModel
+
+<h2>Şifre Belirleme</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">@ViewBag.Message</div>
+}
+
+<form asp-action="SifreBelirle" method="post">
+    <input type="hidden" asp-for="Email" />
+    <input type="hidden" asp-for="Token" />
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Yeni Şifre:</label>
+        <input asp-for="Password" class="form-control" type="password" required />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Şifreyi Belirle</button>
+</form>

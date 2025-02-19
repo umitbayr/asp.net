@@ -1,0 +1,31 @@
+﻿@if (Context.User.Identity.IsAuthenticated)
+{
+    <form asp-controller="Account" asp-action="Cikis" method="post" id="cikisForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                <span class="navbar-text" style="font-weight:500">
+                    Merhaba,
+                    @{
+                        var firstName = User.FindFirst("FirstName")?.Value;
+                        var lastName = User.FindFirst("LastName")?.Value;
+                        var fullName = (!string.IsNullOrEmpty(firstName) ? firstName : "Kullanıcı") +
+                        (!string.IsNullOrEmpty(lastName) ? " " + lastName : "");
+                    }
+                    @fullName
+                </span>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-success text-white" style="margin-left:25px; font-size:small">Oturumu Kapat</button>
+
+            </li>
+            
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a class="nav-link text-dark" asp-controller="Account" asp-action="Kayit">Kayit ol</a></li>
+        <li><a class="nav-link text-dark" asp-controller="Account" asp-action="Giris">Giriş yap</a></li>
+    </ul>
+}
