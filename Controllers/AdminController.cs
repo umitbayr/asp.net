@@ -4,6 +4,7 @@ using Login.Entities;
 using Login.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AspNetCoreGeneratedDocument;
 
 namespace Login.Controllers
 {
@@ -139,11 +140,12 @@ namespace Login.Controllers
                 LastName = user.LastName,
                 Email = user.Email,
                 UserName = user.UserName,
+                UserId = user.UserId
             };
 
             return View(model);
         }
-
+        
         [HttpPost]
         public IActionResult Guncelle(GuncelleViewModel model)
         {
@@ -169,6 +171,12 @@ namespace Login.Controllers
 
             // Listele sayfasına yönlendir
             return RedirectToAction("Listele","Admin");
+        }
+
+        [HttpPost]
+        public IActionResult rolGuncelle(int id)
+        {
+
         }
     }
 }

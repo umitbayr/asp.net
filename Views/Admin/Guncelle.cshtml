@@ -8,6 +8,7 @@
     <div class="account-box" style=" margin-top:-50px">
         <h2>Kullanıcı bilgilerini güncelle</h2>
         <form asp-action="Guncelle" method="post">
+            <input type="hidden" asp-for="UserId" value="@Model.UserId"/> 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @if (ViewBag.Message != null)
             {

@@ -1,0 +1,42 @@
+﻿
+@model Login.Models.GuncelleViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="account-container">
+    <div class="account-box" style=" margin-top:-50px">
+        <h2>Kullanıcı Rolünü güncelle</h2>
+        <form asp-action="rolGuncelle" method="post">
+            <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+
+            <div class="form-group">
+                <label for="Role">Kullanıcı Rolü Seçiniz</label><br />
+
+                <!-- Kullanıcı rolü seçimi (Radio button) -->
+                <div>
+                    <input type="radio" id="user" name="Role" value="User" checked />
+                    <label for="user">User</label>
+                </div>
+                <div>
+                    <input type="radio" id="admin" name="Role" value="Admin" />
+                    <label for="admin">Admin</label>
+                </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary" style="margin-top:20px">Kullanıcıyı rolünü güncelle</button>
+
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
