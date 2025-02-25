@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Login.Entities.UserAccount>  // Bu sayfa, UserAccount türünden bir koleksiyon alacak. Model, tüm kullanıcıları temsil eder.
+
+@foreach (var item in Model)  // Model'deki her bir UserAccount objesini dolaşan döngü
+{
+    <tr>
+        <!-- Her bir kullanıcı için bir satır (row) oluşturuyoruz -->
+        <!-- Kullanıcının UserId'sini tabloda gösteriyoruz -->
+        <td>@item.UserId</td>
+
+        <!-- Kullanıcının adını (FirstName) tabloda gösteriyoruz -->
+        <td>@item.FirstName</td>
+
+        <!-- Kullanıcının soyadını (LastName) tabloda gösteriyoruz -->
+        <td>@item.LastName</td>
+
+        <!-- Kullanıcının e-posta adresini (Email) tabloda gösteriyoruz -->
+        <td>@item.Email</td>
+
+        <!-- Kullanıcının kullanıcı adını (UserName) tabloda gösteriyoruz -->
+        <td>@item.UserName</td>
+
+        <!-- Kullanıcının e-posta doğrulama durumunu (IsEmailConfirmed) "Evet" ya da "Hayır" olarak gösteriyoruz -->
+        <td>@(item.IsEmailConfirmed ? "Evet" : "Hayır")</td>
+
+        <!-- Kullanıcının rolünü (Role) tabloda gösteriyoruz -->
+        <td>@item.Role</td>
+
+        <!-- Kullanıcı ile ilgili düzenleme ve silme işlemleri için butonlar -->
+        <td>
+            <!-- Düzenle butonu: Kullanıcının UserId'sini taşıyan bir buton -->
+            <a class="btn btn-primary btn-sm" data-id="@item.UserId"><i class="bi bi-pencil"></i></a>
+
+            <!-- Sil butonu: Kullanıcının UserId'sini taşıyan bir silme butonu -->
+            <a class="btn btn-danger btn-sm" data-id="@item.UserId"><i class="bi bi-person-x"></i></a>
+        </td>
+    </tr>
+}

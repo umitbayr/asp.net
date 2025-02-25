@@ -5,6 +5,7 @@ using Login.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AspNetCoreGeneratedDocument;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Login.Controllers
 {
@@ -32,7 +33,10 @@ namespace Login.Controllers
         {
             return View();
         }
-        
+        public IActionResult RolListele()
+        {
+            return View(_context.UserAccounts.ToList());
+        }
 
         [HttpPost]
         public IActionResult Ekle(EkleViewModel model)
@@ -120,6 +124,7 @@ namespace Login.Controllers
             _context.UserAccounts.Remove(user);
             _context.SaveChanges();
 
+            TempData["Message"] = "Kullanıcı başarıyla silindi!";
             return RedirectToAction("Listele"); // Kullanıcı listesine geri dön
         }
 
@@ -145,11 +150,11 @@ namespace Login.Controllers
 
             return View(model);
         }
-        
+
         [HttpPost]
         public IActionResult Guncelle(GuncelleViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -168,16 +173,78 @@ namespace Login.Controllers
 
             _context.UserAccounts.Update(user);
             _context.SaveChanges();
+            TempData["Message"] = "Kullanıcı başarıyla güncellendi!";
 
             // Listele sayfasına yönlendir
-            return RedirectToAction("Listele","Admin");
+            return RedirectToAction("Listele", "Admin");
         }
 
-        [HttpPost]
-        public IActionResult rolGuncelle(int id)
+
+        [Route("Admin/RolGuncelle/{userId}")]
+        [HttpGet]
+        public IActionResult RolGuncelle(int userId, string role)
         {
+            var user = _context.UserAccounts.FirstOrDefault(u => u.UserId == userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
+            // Kullanıcının rolünü güncelle
+            user.Role = role;
+            _context.SaveChanges();
+
+            TempData["Message"] = "Rol başarıyla güncellendi!";
+            return RedirectToAction("RolListele");
         }
+        [HttpGet]
+        public IActionResult Arama(string search, int columnIndex)
+        {
+            // 1. Eğer arama metni boş veya null ise, tüm kullanıcıları listele
+            if (string.IsNullOrEmpty(search))
+            {
+                // Arama metni yoksa, tüm kullanıcıları getir ve "_UserListPartial" adlı partial view'ı döndür
+                return PartialView("_UserListPartial", _context.UserAccounts.ToList());
+            }
+
+            IQueryable<UserAccount> users = _context.UserAccounts;
+
+            switch (columnIndex)
+            {
+                case 0: // Id sütunu
+                    if (int.TryParse(search, out int userId))
+                        users = users.Where(u => u.UserId == userId);
+                    break;
+                case 1: // firstname sütunu
+                    users = users.Where(u => u.FirstName.Contains(search));
+                    break;
+                case 2:
+                    users = users.Where(u => u.LastName.Contains(search));
+                    break;
+                case 3:
+                    users = users.Where(u => u.Email.Contains(search));
+                    break;
+                case 4:
+                    users = users.Where(u => u.UserName.Contains(search));
+                    break;
+                case 5:
+                    bool dogrulanmisMi = search.ToLower() == "evet";
+                    users = users.Where(u => u.IsEmailConfirmed==dogrulanmisMi);
+                    break;
+                case 6:
+                    users = users.Where(u => u.Role.Contains(search));
+                    break;
+                default:
+                    break;
+            }
+
+            return PartialView("_UserListPartial", users.ToList());
+        }
+
+
+
+
+
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿@if (Context.User.Identity.IsAuthenticated)
+
 {
     <form asp-controller="Account" asp-action="Cikis" method="post" id="cikisForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
@@ -15,7 +16,7 @@
                 </span>
             </li>
             <li>
-                <button type="submit" class="btn btn-success text-white" style="margin-left:25px; font-size:small">Oturumu Kapat</button>
+                <button type="submit" class="btn btn-success text-white" style="margin-left:25px; font-size:small"><i class="bi bi-box-arrow-right"></i></button>
 
             </li>
             

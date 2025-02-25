@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 </head>
 <body>
@@ -33,17 +34,17 @@
 
     <!-- Sidebar (Sol Menü) -->
     <div class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 200px;">
-        <a asp-controller="Admin" asp-action="Dashboard" class="w3-bar-item w3-button">
-            Kontrol Paneli
+        <a asp-controller="Admin" asp-action="Dashboard" class="w1-bar-item w3-button">
+            <i class="bi bi-house"></i> Anasayfa
         </a>
-        <a asp-area="" asp-controller="Admin" asp-action="Listele" class="w3-bar-item w3-button">Kullanıcıları Listele</a>
+        <a asp-area="" asp-controller="Admin" asp-action="Listele" class="w1-bar-item w3-button"><i class="bi bi-list-nested"></i> Kullanıcıları Listele</a>
         <!-- Dropdown Menü -->
         <button class="w3-button w3-block w3-left-align" onclick="myAccFunc()">
-            Kullanıcı İşlemleri <i class="fa fa-caret-down"></i>
+            <i class="bi bi-people"></i>   Kullanıcı İşlemleri <i class="fa fa-caret-down"></i>
         </button>
         <div id="dropdown" class="w3-hide w3-white w3-card">
             <a asp-area="" asp-controller="Admin" asp-action="Ekle" class="w3-bar-item w3-button">Kullanıcı Ekle</a>
-            <a asp-area="" asp-controller="User" asp-action="About" class="w3-bar-item w3-button">Kullanıcı Yetkilerini Düzenle</a>
+            <a asp-area="" asp-controller="Admin" asp-action="RolListele" class="w3-bar-item w3-button">Kullanıcı Rollerini Düzenle</a>
         </div>
     </div>
 

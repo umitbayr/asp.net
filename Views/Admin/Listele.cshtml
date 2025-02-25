@@ -1,110 +1,118 @@
-﻿@model IEnumerable<Login.Entities.UserAccount>
+﻿@model IEnumerable<Login.Entities.UserAccount>  // Sayfada kullanılacak olan modelin türü belirtildi. Bu, UserAccount türünden bir koleksiyondur.
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 @{
-    ViewData["Title"] = "Listele";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Listele";  // Sayfa başlığını "Listele" olarak belirledik.
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";  // Bu sayfa için kullanılacak olan layout dosyasını belirtir.
+
 }
-@if (ViewBag.Message != null)
+
+@if (ViewBag.Message != null)  // Eğer ViewBag'de Message varsa, başarılı bir işlem yapılmış demektir.
 {
     <div class="alert alert-success">
-        @ViewBag.Message
+        <!-- Başarı mesajını kullanıcıya göstermek için uyarı kutusu oluşturuluyor. -->
+        @ViewBag.Message  <!-- ViewBag'deki mesaj ekrana yazdırılıyor. -->
     </div>
 }
 
+<!-- Kullanıcıları listeleyecek olan tabloyu başlatıyoruz. -->
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsEmailConfirmed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Role)
-            </th>
-
+            <th><input type="text" class="form-control column-search" data-column="0" placeholder="ID Ara"></th>
+            <th><input type="text" class="form-control column-search" data-column="1" placeholder="Ad Ara"></th>
+            <th><input type="text" class="form-control column-search" data-column="2" placeholder="Soyad Ara"></th>
+            <th><input type="text" class="form-control column-search" data-column="3" placeholder="Email Ara"></th>
+            <th><input type="text" class="form-control column-search" data-column="4" placeholder="Kullanıcı Adı Ara"></th>
+            <th><input type="text" class="form-control column-search" data-column="5" placeholder="Email Onayı Ara" style="width:155px"></th>
+            <th><input type="text" class="form-control column-search" data-column="6" placeholder="Rol Ara"></th>
+        </tr>
+        <tr>
+            <!-- Tablo başlıklarını tanımlıyoruz. Her biri kullanıcı bilgilerinin bir özelliğini temsil eder. -->
+            <th>Id</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Email</th>
+            <th>Kullanıcı Adı</th>
+            <th>Email Onayı</th>
+            <th>Rol</th>
+            <th>İşlemler</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsEmailConfirmed)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Role)
-                </td>
-
-                <td>
-                    <a class="btn btn-primary btn-sm" onclick="confirmEdit(@item.UserId)">Düzenle</a>
-                    <a class="btn btn-primary btn-sm" onclick="confirmDelete(@item.UserId)">Sil</a>
-                </td>
-                   
-            </tr>
-        }
+    <tbody id="userList">
+        @await Html.PartialAsync("_UserListPartial", Model)  <!-- Sayfanın başlangıç verilerini (modeli) "_UserListPartial" adındaki partial view ile listeleyip, tbody kısmına yüklüyoruz. -->
     </tbody>
 </table>
 
-<script>
-    function confirmEdit(userId) {
-        Swal.fire({
-            title: "Emin misiniz?",
-            text: "Bu kullanıcıyı düzenlemek istiyor musunuz?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "Evet",
-            cancelButtonText: "Hayır",
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/Admin/Guncelle/' + userId;
-            }
-        });
-    }
+@section scripts {
+      
 
-     function confirmDelete(userId) {
-        Swal.fire({
-            title: "Emin misiniz?",
-            text: "Bu kullanıcıyı silmek istiyor musunuz?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Evet, sil",
-            cancelButtonText: "Hayır",
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/Admin/Sil/' + userId;
-            }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+
+    <script>
+        $(document).ready(function () {  // Sayfa tamamen yüklendikten sonra çalışacak fonksiyon.
+
+            // sütun bazlı arama
+            $('.column-search').on('keyup', function () {
+                var columnIndex = $(this).data('column');
+                var searchText = $(this).val();  // Arama kutusundaki metni alıyoruz.
+                
+
+                $.ajax({
+                    url: '/Admin/Arama',  // AdminController'daki Arama metoduna GET isteği gönderiyoruz.
+                    type: 'GET',
+                    data: { search: searchText , columnIndex: columnIndex},  // Arama metnini server'a gönderiyoruz.
+                    success: function (data) {
+                        $('#userList').html(data);  // Dönen yeni veriyi (kullanıcı listesini) <tbody id="userList"> içine yerleştiriyoruz.
+                    }
+                });
+            });
+
+            // Düzenle ve Sil butonları için event delegation kullanıyoruz. Çünkü bu butonlar AJAX ile yüklendiği için normal jQuery seçicileri ile işleme almak mümkün olmaz.
+            $(document).on('click', '.btn-primary', function () {
+                var userId = $(this).data('id');  // Düzenle butonundan UserId'yi alıyoruz.
+                confirmEdit(userId);  // Kullanıcıyı düzenleme işlemini başlatıyoruz.
+            });
+
+            $(document).on('click', '.btn-danger', function () {
+                var userId = $(this).data('id');  // Silme butonundan UserId'yi alıyoruz.
+                confirmDelete(userId);  // Kullanıcıyı silme işlemini başlatıyoruz.
+            });
         });
-    }
-</script>
+
+        // Düzenleme işlemine dair onay penceresi fonksiyonu
+        function confirmEdit(userId) {
+            Swal.fire({
+                title: "Emin misiniz?",  // Kullanıcıya düzenlemeyi onaylatıyoruz.
+                text: "Bu kullanıcıyı düzenlemek istiyor musunuz?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Evet",
+                cancelButtonText: "Hayır",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33"
+            }).then((result) => {
+                if (result.isConfirmed) {  // Eğer kullanıcı "Evet" derse, düzenleme sayfasına yönlendirilir.
+                    window.location.href = '/Admin/Guncelle/' + userId;
+                }
+            });
+        }
+
+        // Silme işlemine dair onay penceresi fonksiyonu
+        function confirmDelete(userId) {
+            Swal.fire({
+                title: "Emin misiniz?",  // Kullanıcıya silmeyi onaylatıyoruz.
+                text: "Bu kullanıcıyı silmek istiyor musunuz?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Evet, sil",
+                cancelButtonText: "Hayır",
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6"
+            }).then((result) => {
+                if (result.isConfirmed) {  // Eğer kullanıcı "Evet" derse, silme işlemi yapılır.
+                    window.location.href = '/Admin/Sil/' + userId;  // Kullanıcıyı silme işlemi yapılacak sayfaya yönlendirilir.
+                }
+            });
+        }
+    </script>
+}
